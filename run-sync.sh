@@ -1,4 +1,4 @@
-$!/bin/bash
+#!/bin/bash
 # change dir to project path
 DIR="$(dirname "$0")"
 cd $DIR
