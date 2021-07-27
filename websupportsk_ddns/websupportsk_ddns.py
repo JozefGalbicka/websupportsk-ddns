@@ -133,16 +133,20 @@ if __name__ == "__main__":
         if records and records[0]['note'] != full_ddns_id:
             logger.info('EDITING RECORD:: note is incorrect, editing...')
             client.edit_record(records[0]['id'], note=full_ddns_id)
-        else:
+        elif records:
             logger.info('Record note checked, valid')
+        else:
+            logger.info('Record non-existent')
 
         # if record exist bud ip4 has changed
         records = client.get_records(type_="A", name=subdomain, note=full_ddns_id)
         if records and records[0]['content'] != ip4:
             logger.info('EDITING RECORD:: IP address has changed, editing...')
             client.edit_record(records[0]['id'], content=ip4)
-        else:
+        elif records:
             logger.info('IP address checked, unchanged')
+        else:
+            logger.info('Record non-existent')
 
         # if record doesn't exit
         if not records:
