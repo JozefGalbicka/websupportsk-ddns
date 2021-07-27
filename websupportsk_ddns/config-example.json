@@ -1,0 +1,14 @@
+{
+  "websupport": {
+    "authentication": {
+      "identifier": "api_identifier_here",
+      "secret_key": "api_secret_key_here"
+    },
+    "registered_domain": "example.com",
+    "subdomains": [
+      "subdomain1",
+      "subdomain2"
+    ],
+    "ddns_id": "01"
+  }
+}
