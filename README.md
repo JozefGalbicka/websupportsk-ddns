@@ -8,6 +8,8 @@ managing A records using the Websupport Remote API.
 IPv4 address and then creates/updates DNS records for each specified subdomain through
 Websupport Remote API.
 
+Python 3.7+ is recommended.
+
 ## Installation
 First copy the example configuration file into the real one.
 ```commandline
@@ -49,15 +51,32 @@ Open `config.json` and specify your own credentials and settings.
             network, there is no problem if you won't specify this value'"
 ```
 
-## Deploy with cron
-Script requires Python 3.7+. 
+## Deploy with cron 
 1. Download/clone this repository and give permission to the bash script by running 
-`chmod +x ./run-sync.sh`. Now you can execute `./run-sync.sh`, which will set up virtualenv, pull needed dependencies
+`chmod u+x ./run-sync`. Now you can execute `./run-sync`, which will set up virtualenv, pull needed dependencies
 and start the script.
    
 2. Run `crontab -e`
    
 3. Create crontab job to sync DNS records every 5 minutes. Edit path and timing by your needs.
 ```bash
-*/5 * * * * /home/your_username_here/websupportsk-ddns/run-sync.sh
+*/5 * * * * /home/your_username_here/websupportsk-ddns/run-sync
 ```
+
+## Deploy with docker
+Pre-compiled images are available via [official Docker Hub Container Image Library(missing link)]()
+
+```yaml
+version: "3.7"
+services:
+  websupportsk-ddns:
+    image: crypsde/websupportsk-ddns:latest
+    container_name: websupportsk-ddns
+    init: true
+    volumes:
+      - /YOUR/PATH/HERE/config.json:/app/websupportsk_ddns/config.json
+    restart: unless-stopped
+```
+
+### Running
+    docker-compose up -d
