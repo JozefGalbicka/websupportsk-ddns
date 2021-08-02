@@ -5,14 +5,16 @@ import time
 import requests
 from datetime import datetime, timezone
 import json
-
-import logging
 import os
-
+import logging.config
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+if not os.path.isdir('logs'):
+    print("test")
+    os.mkdir('logs')
 
-logging.basicConfig(level=logging.INFO)
+logging.config.fileConfig('logger.conf')
 logger = logging.getLogger(__name__)
+
 
 
 def get_public_ip4():
@@ -28,6 +30,7 @@ def get_public_ip4():
         except requests.ConnectionError:
             logger.error("aws checkip request failed")
             logger.error("unable to obtain public ip address from external services")
+            exit(3)
     return ip4
 
 
@@ -54,7 +57,14 @@ class WebsupportClient:
         self.s = requests.Session()
         self.s.auth = (identifier, signature)
         self.s.headers.update(headers)
-        login_response = self.s.get("%s%s%s" % (self.api, self.default_path, self.query)).content
+        login_response = self.s.get("%s%s%s" % (self.api, self.default_path, self.query)).json()
+        if 'message' and 'code' in login_response:
+            logger.error(f"Error occurred, response: {login_response}")
+            exit(1)
+        domain_response = self.s.get(f"{self.api}{self.default_path}/zone/{self.domain}").json()
+        if 'message' and 'code' in domain_response:
+            logger.error(f"Error occurred, response: {domain_response}")
+            exit(2)
 
     def get_records(self, type_=None, id_=None, name=None, content=None, ttl=None, note=None):
         # create dict of arguments passed, filter out 'None' values and 'self' argument, rename keys(remove "_"
@@ -72,7 +82,7 @@ class WebsupportClient:
             # record is valid only if all values from args match
             records.append(item) if len(intersection_dict) == len(args) else None
 
-        logger.info(f"GETTING RECORDS:: arguments: {args},... found: {len(records)} record(s)")
+        logger.debug(f"GETTING RECORDS:: arguments: {args},... found: {len(records)} record(s)")
         return records
 
     def create_record(self, type_, name, content, ttl=600, **kwargs):
@@ -127,16 +137,16 @@ if __name__ == "__main__":
         pass
 
     for subdomain in subdomains:
-        logger.info(f"NOW CHECKING SUBDOMAIN: {subdomain}")
+        logger.info(f"CHECKING SUBDOMAIN: {subdomain}")
         # if record for specific subdomain with correct ip4 already exists but doesn't have note comment
         records = client.get_records(type_="A", name=subdomain, content=ip4)
         if records and records[0]['note'] != full_ddns_id:
             logger.info('EDITING RECORD:: note is incorrect, editing...')
             client.edit_record(records[0]['id'], note=full_ddns_id)
         elif records:
-            logger.info('Record note checked, valid')
+            logger.debug('Record note checked, valid')
         else:
-            logger.info('Record non-existent')
+            logger.debug('Record non-existent')
 
         # if record exist bud ip4 has changed
         records = client.get_records(type_="A", name=subdomain, note=full_ddns_id)
@@ -144,15 +154,15 @@ if __name__ == "__main__":
             logger.info('EDITING RECORD:: IP address has changed, editing...')
             client.edit_record(records[0]['id'], content=ip4)
         elif records:
-            logger.info('IP address checked, unchanged')
+            logger.debug('IP address checked, unchanged')
         else:
-            logger.info('Record non-existent')
+            logger.debug('Record non-existent')
 
         # if record doesn't exit
         if not records:
             client.create_record(type_="A", name=subdomain, content=ip4, note=full_ddns_id)
 
-    logger.info("NOW SEARCHING FOR SUBDOMAINS TO REMOVE")
+    logger.info("SEARCHING FOR SUBDOMAINS TO REMOVE")
     all_a_records = client.get_records(type_="A", note=full_ddns_id)
     removed = 0
     for r in all_a_records:
