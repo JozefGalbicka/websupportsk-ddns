@@ -2,3 +2,6 @@
 /websupportsk_ddns/config.json
 /websupportsk_ddns/logs
 .idea
+/container
+websupportsk_ddns/__pycache__/
+/docs
