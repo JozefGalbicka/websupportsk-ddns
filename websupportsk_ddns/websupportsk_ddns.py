@@ -8,6 +8,8 @@ import json
 import os
 import logging.config
 
+import socket
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 if not os.path.isdir('logs'):
     print("test")
@@ -15,6 +17,14 @@ if not os.path.isdir('logs'):
 
 logging.config.fileConfig('logger.conf')
 logger = logging.getLogger(__name__)
+
+
+def check_ip_address_validity(ip):
+    try:
+        socket.inet_aton(ip)
+        return True
+    except socket.error:
+        return False
 
 
 def get_public_ipv4():
@@ -25,14 +35,18 @@ def get_public_ipv4():
     """
     ip = None
     try:
-        ip = requests.get("https://api.ipify.org").text
+        ip = requests.get("https://api.ipify.org").text.strip()
+        if not check_ip_address_validity(ip):
+            raise ValueError
         logger.debug(f"ipify request succeeded, IP: {ip}")
-    except requests.ConnectionError:
-        logger.error("ipify request failed")
+    except (requests.ConnectionError, ValueError):
+        logger.error("ipify request failed, trying aws...")
         try:
-            ip = requests.get("https://checkip.amazonaws.com/").text
+            ip = requests.get("https://checkip.amazonaws.com/").text.strip()
+            if not check_ip_address_validity(ip):
+                raise ValueError
             logger.debug(f"aws checkip request succeeded, IP: {ip}")
-        except requests.ConnectionError:
+        except (requests.ConnectionError, ValueError):
             logger.error("aws checkip request failed")
             logger.error("unable to obtain public ip address from external services, exiting...")
             exit(3)
