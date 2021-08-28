@@ -4,7 +4,9 @@ WORKDIR /app
 
 ENV TZ="Europe/Bratislava"
 
-COPY websupportsk_ddns websupportsk_ddns
+COPY websupportsk_ddns/__init__.py websupportsk_ddns/__init__.py
+COPY websupportsk_ddns/logger.conf websupportsk_ddns/logger.conf
+COPY websupportsk_ddns/websupportsk_ddns.py websupportsk_ddns/websupportsk_ddns.py
 COPY bin bin
 COPY run-sync .
 
