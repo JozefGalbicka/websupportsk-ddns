@@ -30,6 +30,10 @@ Open `config.json` and specify your own credentials and settings.
       "subdomain2"
     ],
     "ddns_id": "01"
+  },
+  "pushover": {
+    "api_token": "your_api_token",
+    "user_key": "your_user_key"
   }
 }
 ```
@@ -39,7 +43,7 @@ Open `config.json` and specify your own credentials and settings.
 "subdomains": "List of subdomains you want to associate with your public IP. '@' stands for domain
             without use of subdomain, '*' on the other hand works as wildcard subdomain. You can
             specify as much subdomains as you need"
-"ddns_id": "ID of your network, you can specify any value that suits your needs
+"ddns_id"(optional): "ID of your network, you can specify any value that suits your needs
             - i.e. if you specify value '01', result value will be 'websupportsk-ddns-01'.
             This value is then inserted into 'note' field of your records created from within
             the network of script, so you know to which network every public IP address belongs.
@@ -49,6 +53,8 @@ Open `config.json` and specify your own credentials and settings.
             second '02' and so on. Without this implementation could one network change 
             public address of another network and not its own. If you are using single
             network, there is no problem if you won't specify this value'"
+"pushover"(optional): "If specified with credential values, script will push important
+            notifications to your pushover app."
 ```
 
 ## Deploy with cron 

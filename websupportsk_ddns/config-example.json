@@ -10,5 +10,9 @@
       "subdomain2"
     ],
     "ddns_id": "01"
+  },
+  "pushover": {
+    "api_token": "your_api_token",
+    "user_key": "your_user_key"
   }
 }
