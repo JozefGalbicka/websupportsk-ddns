@@ -49,6 +49,11 @@ def get_public_ipv4():
     return ip
 
 
+def send_notifications(notifiers, message):
+    for notifier in notifiers:
+        notifier.send_notification(message)
+
+
 class Pushover:
     def __init__(self, api_token, user_key):
         self.api_token = api_token
@@ -64,6 +69,20 @@ class Pushover:
         logger.debug(f"Pushover notification response: {r.text}")
         if "errors" in r.text:
             logger.error(f"Pushover error occured: {r.text}")
+
+
+class Gotify:
+    def __init__(self, url, api_token):
+        self.api_token = api_token
+        self.url = f"http://{url}/message?token={api_token}"
+
+    def send_notification(self, text):
+        r = requests.post(self.url, data={
+            "message": text
+        })
+        logger.debug(f"Gotify notification response: {r.text}")
+        if "error" in r.text:
+            logger.error(f"Gotify error occured: {r.text}")
 
 
 def main():
@@ -86,14 +105,19 @@ def main():
     full_ddns_id = "websupportsk-ddns"
 
     # if custom ddns_id specified
-    notifier = None
+    notifiers = list()
     try:
         full_ddns_id += f"-{config['websupport']['ddns_id']}"
     except KeyError:
         pass
 
     try:
-        notifier = Pushover(config['pushover']['api_token'], config['pushover']['user_key'])
+        notifiers.append(Pushover(config['pushover']['api_token'], config['pushover']['user_key']))
+    except KeyError:
+        pass
+
+    try:
+        notifiers.append(Gotify(config['gotify']['url'], config['gotify']['api_token']))
     except KeyError:
         pass
 
@@ -107,8 +131,7 @@ def main():
             message = f"Subdomain `{subdomain}`, IP `{ipv4}`:: note is incorrect, editing... " \
                       f"(`{records[0]['note']}` -> `{full_ddns_id}`)"
             logger.info(message)
-            if notifier:
-                notifier.send_notification(message)
+            send_notifications(notifiers, message)
 
             response = client.edit_record(records[0]['id'], note=full_ddns_id)
             logger.debug(f"Response: {response}")
@@ -124,8 +147,7 @@ def main():
             message = f"Subdomain `{subdomain}`, Note `{full_ddns_id}`:: IP address has changed, editing... " \
                       f"(`{records[0]['content']}` -> `{ipv4}`)"
             logger.info(message)
-            if notifier:
-                notifier.send_notification(message)
+            send_notifications(notifiers, message)
 
             response = client.edit_record(records[0]['id'], content=ipv4)
             logger.debug(f"Response: {response}")
@@ -141,8 +163,8 @@ def main():
             response = client.create_record(type_="A", name=subdomain, content=ipv4, note=full_ddns_id)
             message = f"Creating record: Subdomain `{subdomain}`, IP `{ipv4}`, Note `{full_ddns_id}`"
             logger.info(message)
-            if notifier:
-                notifier.send_notification(message)
+            send_notifications(notifiers, message)
+
             logger.debug(f"Response: {response}")
             change_occurred = True
 

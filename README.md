@@ -34,6 +34,10 @@ Open `config.json` and specify your own credentials and settings.
   "pushover": {
     "api_token": "your_api_token",
     "user_key": "your_user_key"
+  },
+  "gotify": {
+    "url": "gotify.example.com",
+    "api_token": "your_api_token"
   }
 }
 ```
@@ -55,6 +59,8 @@ Open `config.json` and specify your own credentials and settings.
             network, there is no problem if you won't specify this value'"
 "pushover"(optional): "If specified with credential values, script will push important
             notifications to your pushover app."
+"gotify"(optional): "Same as pushover, you just need to self-host your own gotify server.
+            `Both notifiers can be used alongside each other.`" 
 ```
 
 ## Deploy with cron 

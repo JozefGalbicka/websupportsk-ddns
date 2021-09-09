@@ -14,5 +14,9 @@
   "pushover": {
     "api_token": "your_api_token",
     "user_key": "your_user_key"
+  },
+  "gotify": {
+    "url": "gotify.example.com",
+    "api_token": "your_api_token"
   }
 }
