@@ -1,7 +1,13 @@
 #!/bin/sh
 
-env >> /etc/environment
+#env >> /etc/environment
+dir="/app"
+
+echo "Creating user $PUID:$PGID..."
+/usr/sbin/addgroup -g ${PGID} "ddns" && /usr/sbin/adduser -u ${PUID} -G "ddns" -D -s /bin/sh "ddns"
+chown -R ddns:ddns $dir
+chown root:root bin/entrypoint
 
 # execute CMD
 echo "$@"
-exec "$@"
+exec su - ddns -c "$*"

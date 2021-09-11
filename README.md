@@ -60,7 +60,7 @@ Open `config.json` and specify your own credentials and settings.
 "pushover"(optional): "If specified with credential values, script will push important
             notifications to your pushover app."
 "gotify"(optional): "Same as pushover, you just need to self-host your own gotify server.
-            `Both notifiers can be used alongside each other.`" 
+            Both notifiers can be used alongside each other." 
 ```
 
 ## Deploy with cron 
@@ -76,7 +76,7 @@ and start the script.
 ```
 
 ## Deploy with docker
-Pre-compiled images are available via [official Docker Hub Container Image Library(missing link)]()
+Pre-compiled images are available via [official Docker Hub Container Image Library](https://hub.docker.com/repository/docker/crypsde/websupportsk-ddns)
 
 ```yaml
 version: "3.7"
@@ -84,8 +84,12 @@ services:
   websupportsk-ddns:
     image: crypsde/websupportsk-ddns:latest
     container_name: websupportsk-ddns
+    environment:
+      - PUID=1000 # default 1000
+      - PGID=1000 # default 1000
     volumes:
-      - /YOUR/PATH/HERE/config.json:/app/websupportsk_ddns/config.json
+      - /path/to/logs:/app/websupportsk_ddns/logs
+      - /path/to/config.json:/app/websupportsk_ddns/config.json
     restart: unless-stopped
 ```
 
