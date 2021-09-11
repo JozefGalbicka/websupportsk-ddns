@@ -84,7 +84,6 @@ services:
   websupportsk-ddns:
     image: crypsde/websupportsk-ddns:latest
     container_name: websupportsk-ddns
-    init: true
     volumes:
       - /YOUR/PATH/HERE/config.json:/app/websupportsk_ddns/config.json
     restart: unless-stopped

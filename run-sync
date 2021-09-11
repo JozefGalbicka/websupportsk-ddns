@@ -8,8 +8,10 @@ python3 -m venv venv
 source ./venv/bin/activate
 
 # install dependencies
+echo "Installing/updating dependencies..."
 pip3 install --upgrade pip > /dev/null
 pip3 install requests websupportsk > /dev/null
 
 # start script
-python3 websupportsk_ddns/websupportsk_ddns.py
+echo "websupportsk_ddns/websupportsk_ddns.py $1"
+python3 websupportsk_ddns/websupportsk_ddns.py $1
