@@ -13,5 +13,5 @@ pip3 install --upgrade pip > /dev/null
 pip3 install requests websupportsk > /dev/null
 
 # start script
-echo "websupportsk_ddns/websupportsk_ddns.py $1"
-python3 websupportsk_ddns/websupportsk_ddns.py $1
+echo "(cd websupportsk_ddns; websupportsk_ddns.py $1)"
+(cd websupportsk_ddns; python3 websupportsk_ddns.py $1)
