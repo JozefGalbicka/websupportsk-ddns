@@ -10,4 +10,4 @@ chown root:root bin/entrypoint
 
 # execute CMD
 echo "$@"
-exec su - ddns -c "$*"
+exec su ddns -c "$*"
