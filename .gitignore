@@ -1,6 +1,7 @@
 /venv
 /websupportsk_ddns/config.json
 /websupportsk_ddns/logs
+/websupportsk_ddns/testing.py
 .idea
 /container
 websupportsk_ddns/__pycache__/

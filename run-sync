@@ -3,6 +3,9 @@
 DIR="$(dirname "$0")"
 cd $DIR
 
+echo $1
+echo $2
+echo $3
 # create and activate virtualenv
 python3 -m venv venv
 source ./venv/bin/activate
@@ -13,5 +16,5 @@ pip3 install --upgrade pip > /dev/null
 pip3 install requests websupportsk > /dev/null
 
 # start script
-echo "(cd websupportsk_ddns; websupportsk_ddns.py $1)"
-(cd websupportsk_ddns; python3 websupportsk_ddns.py $1)
+echo "(cd websupportsk_ddns; websupportsk_ddns.py $1 $2 $3)"
+(cd websupportsk_ddns; python3 websupportsk_ddns.py $1 $2 $3)

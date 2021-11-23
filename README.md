@@ -87,6 +87,7 @@ services:
     environment:
       - PUID=1000 # default 1000
       - PGID=1000 # default 1000
+      - DDNS_DELAY # default 300 seconds
     volumes:
       - /path/to/logs:/app/websupportsk_ddns/logs
       - /path/to/config.json:/app/websupportsk_ddns/config.json

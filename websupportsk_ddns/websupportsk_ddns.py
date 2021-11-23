@@ -187,7 +187,25 @@ if __name__ == "__main__":
     ddns = WebsupportDDNS()
     if len(sys.argv) > 1:
         if sys.argv[1] == "--repeat":
-            delay = 5 * 60
+            delay = 60 * 5
+            if len(sys.argv) > 2:
+                try:
+                    if sys.argv[2] == "--delay":
+                        delay = int(sys.argv[3])
+                    else:
+                        print("Incorrect flag specified. Exiting now.")
+                        exit(4)
+                except IndexError:
+                    print(f"Missing delay value. Exiting now.")
+                    exit(3)
+                except ValueError:
+                    print(f"Incorrect delay specified. Exiting now.")
+                    exit(2)
+            else:
+                tmp = os.getenv("DDNS_DELAY")
+                if tmp is not None:
+                    delay = int(tmp)
+
             loop_thread = LoopThread()
             ddns.run_update()
             while True:
@@ -196,5 +214,6 @@ if __name__ == "__main__":
                 ddns.run_update()
         else:
             print(f"Unrecognized parameter '{sys.argv[1]}'. Exiting now.")
+            exit(1)
     else:
         ddns.run_update()
