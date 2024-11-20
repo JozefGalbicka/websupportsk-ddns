@@ -17,12 +17,11 @@ COPY websupportsk_ddns/websupportsk_ddns.py websupportsk_ddns/websupportsk_ddns.
 COPY websupportsk_ddns/notifiers.py websupportsk_ddns/notifiers.py
 COPY websupportsk_ddns/logging_handlers.py websupportsk_ddns/logging_handlers.py
 COPY bin bin
-COPY run-sync .
 
 RUN pip install -r requirements.txt
 RUN chown root:root bin/entrypoint
-RUN chmod u+x run-sync
 RUN chmod u+x bin/entrypoint
 
+WORKDIR /app/websupportsk_ddns
 ENTRYPOINT ["/app/bin/entrypoint"]
-CMD ["/app/run-sync", "--repeat"]
+CMD ["python3", "websupportsk_ddns.py", "--repeat"]
