@@ -5,8 +5,8 @@ dir="/app"
 
 echo "Creating user $PUID:$PGID..."
 /usr/sbin/addgroup -g ${PGID} "ddns" && /usr/sbin/adduser -u ${PUID} -G "ddns" -D -s /bin/sh "ddns"
-chown -R ddns:ddns $dir
-chown root:root bin/entrypoint
+chown -R ddns:ddns "$dir"
+chown root:root "$dir/bin/entrypoint"
 
 # execute CMD
 echo "$@"
