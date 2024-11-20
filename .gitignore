@@ -6,3 +6,5 @@
 /container
 websupportsk_ddns/__pycache__/
 /docs
+/examples/logs/
+/examples/config.json

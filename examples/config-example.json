@@ -1,0 +1,22 @@
+{
+  "websupport": {
+    "authentication": {
+      "identifier": "api_identifier_here",
+      "secret_key": "api_secret_key_here"
+    },
+    "registered_domain": "example.com",
+    "subdomains": [
+      "subdomain1",
+      "subdomain2"
+    ],
+    "ddns_id": "01"
+  },
+  "pushover": {
+    "api_token": "your_api_token",
+    "user_key": "your_user_key"
+  },
+  "gotify": {
+    "url": "gotify.example.com",
+    "api_token": "your_api_token"
+  }
+}

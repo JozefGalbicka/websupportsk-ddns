@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  websupportsk-ddns:
+    image: crypsde/websupportsk-ddns:latest
+    container_name: websupportsk-ddns
+    environment:
+      - PUID=1000 # default 1000
+      - PGID=1000 # default 1000
+      - DDNS_DELAY=20 # default 300 seconds
+    volumes:
+      - ./examples/logs:/app/websupportsk_ddns/logs
+      - ./examples/config.json:/app/websupportsk_ddns/config.json
+    restart: unless-stopped
