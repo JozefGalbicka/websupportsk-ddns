@@ -64,15 +64,13 @@ Open `config.json` and specify your own credentials and settings.
 ```
 
 ## Deploy with cron 
-1. Download/clone this repository and give permission to the bash script by running 
-`chmod u+x ./run-sync`. Now you can execute `./run-sync`, which will set up virtualenv, pull needed dependencies
-and start the script.
+1. Download/clone this repository, make sure you have `Make` installed and in the project dir run `make run-dockerless`, which will set up virtualenv, pull needed dependencies and run the script. 
    
 2. Run `crontab -e`
    
-3. Create crontab job to sync DNS records every 5 minutes. Edit path and timing by your needs.
+3. Create crontab job to sync DNS records every 5 minutes. Edit path accordingly. You can optionally change the timing as well.
 ```bash
-*/5 * * * * /home/your_username_here/websupportsk-ddns/run-sync
+*/5 * * * * /usr/bin/make -C /path/to/project/websupportsk-ddns run-dockerless
 ```
 
 ## Deploy with docker
@@ -87,7 +85,7 @@ services:
     environment:
       - PUID=1000 # default 1000
       - PGID=1000 # default 1000
-      - DDNS_DELAY # default 300 seconds
+      - DDNS_DELAY=600 # default 300 seconds
     volumes:
       - /path/to/logs:/app/websupportsk_ddns/logs
       - /path/to/config.json:/app/websupportsk_ddns/config.json
