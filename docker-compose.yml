@@ -8,6 +8,6 @@ services:
       - PGID=1000 # default 1000
       - DDNS_DELAY=20 # default 300 seconds
     volumes:
-      - ./examples/logs:/app/websupportsk_ddns/logs
-      - ./examples/config.json:/app/websupportsk_ddns/config.json
+      - ./logs:/app/websupportsk_ddns/logs
+      - ./websupportsk_ddns/config.json:/app/websupportsk_ddns/config.json
     restart: unless-stopped
